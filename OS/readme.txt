@@ -8,3 +8,6 @@ Read sectors into memory:
     DH = head number
     DL = driver number
     ES:BX = data buffer
+
+INT 0x13 is the BIOS disk services interrupt used in real mode (bootloaders, early OS stages) 
+to access disk drives.
