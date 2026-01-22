@@ -27,6 +27,15 @@ step2:
     mov dh, 0 ;head number
     mov bx, buffer ;data buffer offset
     int 0x13 ;call BIOS disk service
+    jc error
+
+    mov si, buffer
+    call print
+    jmp $
+    
+error:
+    mov si, error_message
+    call print
     jmp $
 
 print:
