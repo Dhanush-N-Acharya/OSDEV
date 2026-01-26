@@ -19,7 +19,7 @@ step2:
     mov ss,ax
     mov sp,0x7c00
     sti ; enables the interrupts
-
+   
     mov ah, 2 ;read sector function
     mov al, 1 ;one sector to read
     mov ch, 0 ;cylinder low eight bits
@@ -31,7 +31,8 @@ step2:
 
     mov si, buffer
     call print
-    jmp $
+
+    jmp $ ; loop back to read the next sector
     
 error:
     mov si, error_message
