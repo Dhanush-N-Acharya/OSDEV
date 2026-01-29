@@ -11,3 +11,16 @@ Read sectors into memory:
 
 INT 0x13 is the BIOS disk services interrupt used in real mode (bootloaders, early OS stages) 
 to access disk drives.
+
+Protected mode:
+> Can provide memory and hardware protection.
+> Different memory schemes.
+> 4GB of memory addressable.
+
+Memory and Hardware Protection:
+> Protected mode allows you to protect memory from being accessed.
+> Protected mode can prevent user programs talking with hardware.
+
+Different memory schemes:
+1.Selectors {CS,DS,ES} etc..
+2.Paging (Remapping Memory Addresses)
