@@ -24,3 +24,19 @@ Memory and Hardware Protection:
 Different memory schemes:
 1.Selectors {CS,DS,ES} etc..
 2.Paging (Remapping Memory Addresses)
+
+Entering protected mode:
+
+> Disable interrupts, including NMI.
+> Enable A20 lines.
+> Load global descriptor table with segment descriptors suitable for code.
+
+What is global descriptor table?
+> What kind of memory a segment is
+> Who can access it
+> Whether it is code, data, or system
+> In protected mode, whether 16-bit or 32-bit
+
+The Global Descriptor Table (GDT) is an array of entries that describe memory segments.
+
+Each entry = one segment description
