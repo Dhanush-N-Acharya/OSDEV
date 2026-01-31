@@ -1,42 +1,76 @@
-Info: boot.bin is like virtual hard disk.
-bless command can be used to check the sectors.
-Read sectors into memory:
-    ah = 02h //specifies BIOS interrupt funtion 13h. It tells the BIOS to read from the disk.
-    al = number of sectors to Read 
-    CH = low eight bits of cylinder number
-    CL = sector number 1-63 //specifies the sector number.
-    DH = head number
-    DL = driver number
-    ES:BX = data buffer
+================================================================================
+                          OS BOOTLOADER DOCUMENTATION
+================================================================================
 
-INT 0x13 is the BIOS disk services interrupt used in real mode (bootloaders, early OS stages) 
-to access disk drives.
+OVERVIEW
+--------
+This document provides technical specifications and implementation details for
+the bootloader and operating system kernel initialization process.
 
-Protected mode:
-> Can provide memory and hardware protection.
-> Different memory schemes.
-> 4GB of memory addressable.
+DISK OPERATIONS
+---------------
+
+Boot Image:
+The boot.bin file serves as a virtual hard disk image used for boot operations.
+
+Sector Inspection:
+The 'bless' command can be utilized to inspect and verify disk sectors.
+
+BIOS Interrupt 0x13 - Disk Services
+------------------------------------
+
+INT 0x13 is the BIOS disk services interrupt used in real mode (bootloaders
+and early OS kernel stages) to access disk drives.
+
+Reading Sectors into Memory:
+The following register values must be set prior to INT 0x13 invocation:
+
+    AH = 02h        - Specifies read function for BIOS interrupt 13h
+    AL              - Number of sectors to read
+    CH              - Low eight bits of cylinder number
+    CL              - Sector number (range: 1-63)
+    DH              - Head number
+    DL              - Drive number
+    ES:BX           - Pointer to data buffer destination
+
+PROTECTED MODE
+--------------
+
+Protected mode is a CPU operating mode that provides enhanced security and
+memory management capabilities compared to real mode.
+
+Key Advantages:
+  • Memory and hardware protection mechanisms
+  • Flexible memory addressing schemes
+  • Support for up to 4GB of addressable memory
 
 Memory and Hardware Protection:
-> Protected mode allows you to protect memory from being accessed.
-> Protected mode can prevent user programs talking with hardware.
+  • Restricts unauthorized memory access
+  • Prevents user programs from direct hardware communication
+  • Enforces privilege levels for code execution
 
-Different memory schemes:
-1.Selectors {CS,DS,ES} etc..
-2.Paging (Remapping Memory Addresses)
+Memory Addressing Schemes:
+  1. Selectors - Segment registers (CS, DS, ES, etc.)
+  2. Paging - Virtual to physical memory address remapping
 
-Entering protected mode:
+Transition to Protected Mode:
+  1. Disable interrupts, including NMI (Non-Maskable Interrupt)
+  2. Enable the A20 address line
+  3. Load Global Descriptor Table (GDT) with appropriate segment descriptors
 
-> Disable interrupts, including NMI.
-> Enable A20 lines.
-> Load global descriptor table with segment descriptors suitable for code.
+GLOBAL DESCRIPTOR TABLE (GDT)
+-----------------------------
 
-What is global descriptor table?
-> What kind of memory a segment is
-> Who can access it
-> Whether it is code, data, or system
-> In protected mode, whether 16-bit or 32-bit
+The Global Descriptor Table is an array of entries that describe memory
+segments in protected mode.
 
-The Global Descriptor Table (GDT) is an array of entries that describe memory segments.
+GDT Entry Information:
+Each entry specifies the following segment properties:
+  • Memory segment type (code, data, or system)
+  • Access permissions and privilege levels
+  • Segment size and base address
+  • 16-bit or 32-bit addressing capability
 
-Each entry = one segment description
+Structure:
+Each GDT entry provides a complete segment description for protected mode
+memory management.
