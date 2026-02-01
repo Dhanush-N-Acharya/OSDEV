@@ -74,3 +74,40 @@ Each entry specifies the following segment properties:
 Structure:
 Each GDT entry provides a complete segment description for protected mode
 memory management.
+
+In protected mode the rules for memory access is stored in GDT.
+The GDT is simply array of entries.
+Each entry is called a descriptor.
+
+Each descriptor describes one segment, such as:
+> kernel code.
+> kernel data.
+> user code.
+> user data.
+> system structures.
+
+How the CPU uses the GDT:
+1.A segment register (CS, DS, SS, etc.) is loaded with a segment selector
+2.The selector points to an entry in the GDT
+3.The CPU reads that entry
+4.The CPU checks:
+  Is this segment present?
+  Is the access allowed?
+  Is this code or data?
+5.If valid → access allowed
+  If not → CPU raises a fault
+
+What kind of information does a GDT entry define?
+Each GDT entry defines:
+  Type: code, data, or system
+  Privilege level: kernel (0) or user (3)
+  Access permissions: read, write, execute
+  Mode behavior: 16-bit, 32-bit, or 64-bit
+
+How the CPU finds the GDT:
+The CPU uses a special register:
+  GDTR (Global Descriptor Table Register)
+This register holds:
+  the memory address of the GDT
+  the size of the GDT
+  command to load the GDT: lgdt [gdt_descriptor]
