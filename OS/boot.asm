@@ -19,26 +19,9 @@ step2:
     mov ss,ax
     mov sp,0x7c00
     sti ; enables the interrupts
-   
-    mov ah, 2 ;read sector function
-    mov al, 1 ;one sector to read
-    mov ch, 0 ;cylinder low eight bits
-    mov cl, 2 ;sector number (starts from 1)
-    mov dh, 0 ;head number
-    mov bx, buffer ;data buffer offset
-    int 0x13 ;call BIOS disk service
-    jc error
-
-    mov si, buffer
-    call print
 
     jmp $ ; loop back to read the next sector
     
-error:
-    mov si, error_message
-    call print
-    jmp $
-
 print:
     mov bx,0
 .loop:
@@ -55,9 +38,5 @@ print_char:
     int 0x10
     ret
 
-error_message: db 'Error reading sector!',0
-
 times 510-($ - $$) db 0
 dw 0xAA55  
-
-buffer:
