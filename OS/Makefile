@@ -1,4 +1,4 @@
 all:
-	nasm -f bin ./boot.asm -o ./boot.bin
-	dd if=./message.txt bs=512 conv=sync >> ./boot.bin
-	#dd if=/dev/zero bs=512 count=1 >> ./boot.bin
+	nasm -f bin ./src/boot/boot.asm -o ./bin/boot.bin
+clean:
+	rm -rf ./bin/boot.bin
