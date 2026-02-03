@@ -111,3 +111,6 @@ This register holds:
   the memory address of the GDT
   the size of the GDT
   command to load the GDT: lgdt [gdt_descriptor]
+
+Enabling A20 line:
+> The A20 Address Line is the physical representation of the 21st bit.
