@@ -114,3 +114,9 @@ This register holds:
 
 Enabling A20 line:
 > The A20 Address Line is the physical representation of the 21st bit.
+
+Loading 32 bit kernel into memory and working with debugging symbols:
+> what is os.bin?
+os.bin = boot.bin + kernel.bin
+
+We use linker script to link bootloader and kernel file.
