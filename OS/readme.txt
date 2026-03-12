@@ -133,3 +133,5 @@ kernel.asm
    │
    ▼
 kernel.asm.o
+
+In the kernel.asm file, the _start label was added and declared as a global symbol so that it is publicly accessible.
