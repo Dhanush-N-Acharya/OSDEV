@@ -120,3 +120,16 @@ Loading 32 bit kernel into memory and working with debugging symbols:
 os.bin = boot.bin + kernel.bin
 
 We use linker script to link bootloader and kernel file.
+
+boot.asm
+   │
+   ▼
+boot.bin
+   │
+   ▼
+os.bin  (bootloader)
+
+kernel.asm
+   │
+   ▼
+kernel.asm.o
