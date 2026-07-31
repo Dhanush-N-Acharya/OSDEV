@@ -16,7 +16,7 @@ _start:
     mov esp, ebp ; stack pointer
 
     ; Enable A20 line
-    in al, 0x92
+    in al, 0x92  ; in reads from the processor bus
     or al, 2
-    out 0x92, al
+    out 0x92, al ; out writes to the processor bus
     jmp $
