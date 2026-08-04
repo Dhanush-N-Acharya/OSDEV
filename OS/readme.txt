@@ -127,7 +127,7 @@ boot.asm
 boot.bin
    │
    ▼
-os.bin  (bootloader)
+os.bin  (bootable disk image)
 
 kernel.asm
    │
