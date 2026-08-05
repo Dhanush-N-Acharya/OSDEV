@@ -172,3 +172,41 @@ RAM
 │   +----------------------+
 │   | Kernel Sector 100    |
 │   +----------------------+
+
+eax, ebx and ecx registers which are used in the code are general purpose registers.
+edi is used to store the address, we can think it as a pointer.
+
+The x86 CPU has several general-purpose registers:
+
+Register	Common purpose
+EAX	Accumulator (used for arithmetic and function return values)
+EBX	Base register (often used to hold addresses or temporary values)
+ECX	Counter (used for loops and counts)
+EDX	Data register (used in multiplication/division and I/O)
+ESI	Source Index (used for source pointers in string operations)
+EDI	Destination Index (used for destination pointers)
+ESP	Stack Pointer (points to the top of the stack)
+EBP	Base Pointer (used to access function parameters and local variables)
+
+All of them are 32-bit registers in 32-bit mode and can hold any 32-bit value. Their "special purposes" are conventions and are required by certain instructions, but many instructions let you use them interchangeably.
+
+The 32-bit EAX register can also be accessed in smaller pieces:
+
+                EAX (32 bits)
+
++--------------------------------------+
+|               EAX                    |
++--------------------+-----------------+
+|        AX (16 bits)|                 |
++----------+---------+-----------------+
+| AH (8)   | AL (8)  |                 |
++----------+---------+-----------------+
+
+For example:
+mov eax,0x12345678
+
+EAX = 0x12345678
+AX  = 0x5678
+AH  = 0x56
+AL  = 0x78
+
