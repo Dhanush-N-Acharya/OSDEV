@@ -28,7 +28,7 @@ step2:
     mov eax, cr0
     or eax, 0x1
     mov cr0, eax
-    ;jmp CODE_SEG:load32
+    jmp CODE_SEG:load32
 
 ;GDT
 gdt_start:
@@ -64,11 +64,13 @@ load32:
     mov ecx, 100
     mov edi, 0x0100000
     call ata_lba_read
+    jmp CODE_SEG:0x0100000
     
 ata_lba_read:
     mov ebx, eax ;Backup the LBA
     ;send the highest 8bits of the LBA to the hard disk controller
     shr eax, 24
+    or eax, 0xE0 ; select the master drive 
     mov dx, 0x1F6 ;Drive/Head register
     out dx, al
     ; finished sending the highest 8bits of the LBA
@@ -104,8 +106,24 @@ ata_lba_read:
     out dx, al
 
     ;read all the sectors into the Memory
+.next_sector:
+    push ecx
 
-    .next_sector:
+; check if we need to read
+.try_again:
+    mov dx, 0x1f7
+    in al, dx
+    test al, 8
+    jz .try_again
+
+    ;we need to read 256 words at a time
+    mov ecx, 256
+    mov dx, 0x1F0
+    rep insw
+    pop ecx
+    loop .next_sector
+    ; end of reading sectors into memory
+    ret
 
 times 510-($ - $$) db 0
 dw 0xAA55  

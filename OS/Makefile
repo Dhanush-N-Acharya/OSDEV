@@ -1,10 +1,16 @@
 FILES = ./build/kernel.asm.o
 
 all: ./bin/boot.bin ./bin/kernel.bin
-	rm -rf ./bin/os.bin
-	dd if=./bin/boot.bin >> ./bin/os.bin
-	dd if=./bin/kernel.bin >> ./bin/os.bin
+	rm -f ./bin/os.bin
+
+	# Create a 100-sector empty disk image
 	dd if=/dev/zero of=./bin/os.bin bs=512 count=100
+
+	# Write bootloader to sector 0
+	dd if=./bin/boot.bin of=./bin/os.bin conv=notrunc
+
+	# Write kernel starting at sector 1
+	dd if=./bin/kernel.bin of=./bin/os.bin seek=1 conv=notrunc
 
 ./bin/kernel.bin: $(FILES)
 	i686-elf-ld -g -relocatable $(FILES) -o ./build/kernelfull.o
