@@ -29,7 +29,6 @@ step2:
     or eax, 0x1
     mov cr0, eax
     ;jmp CODE_SEG:load32
-    jmp $
 
 ;GDT
 gdt_start:
@@ -58,6 +57,55 @@ gdt_end:
 gdt_descriptor:
     dw gdt_end-gdt_start-1
     dd gdt_start
+
+[BITS 32]
+load32:
+    mov eax, 1
+    mov ecx, 100
+    mov edi, 0x0100000
+    call ata_lba_read
+    
+ata_lba_read:
+    mov ebx, eax ;Backup the LBA
+    ;send the highest 8bits of the LBA to the hard disk controller
+    shr eax, 24
+    mov dx, 0x1F6 ;Drive/Head register
+    out dx, al
+    ; finished sending the highest 8bits of the LBA
+
+    ; send the total sectors to read
+    mov eax, ecx
+    mov dx, 0x1F2 ;Sector Count Register
+    out dx, al
+    ; finished sending the total Sectors to read
+    
+    ;send more bits of LBA
+    mov eax, ebx ; restore the backup LBA
+    mov dx, 0x1F3
+    out dx, al
+    ;finished sending more bits of LBA
+
+    ;send more bits of lba
+    mov dx, 0x1F4
+    mov eax, ebx ; restore the backup lba
+    shr eax, 8
+    out dx, al
+    ;finished sending more bits of lba
+
+    ;send upper 16 bits of lba
+    mov dx, 0x1F5
+    mov eax, ebx ; restore the backup lba
+    shr eax, 16
+    out dx, al
+    ;finished sending upper 16 bits of lba
+
+    mov dx, 0x1f7
+    mov al, 0x20
+    out dx, al
+
+    ;read all the sectors into the Memory
+
+    .next_sector:
 
 times 510-($ - $$) db 0
 dw 0xAA55  

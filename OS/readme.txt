@@ -135,3 +135,40 @@ kernel.asm
 kernel.asm.o
 
 In the kernel.asm file, the _start label was added and declared as a global symbol so that it is publicly accessible.
+
+In bootloader(boot.asm):
+Info of ports:
+Port
+1F0 -> Data Register
+1F1 -> Error Register
+1F2 -> Sector Count
+1F3 -> LBA bits 7-0
+1F4 -> LBA bits 15-8
+1F5 -> LBA bits 23-16
+1F6 -> Drive + LBA bits 27-24
+1F7 -> Status / Command
+
+Final memory layout after loading into the memory:
+RAM
+
+0x000000
+│
+│
+│
+├── 0x00007C00
+│   +----------------------+
+│   | Bootloader           |
+│   +----------------------+
+│
+├── 0x00100000
+│   +----------------------+
+│   | Kernel Sector 1      |
+│   +----------------------+
+│   | Kernel Sector 2      |
+│   +----------------------+
+│   | Kernel Sector 3      |
+│   +----------------------+
+│          ...
+│   +----------------------+
+│   | Kernel Sector 100    |
+│   +----------------------+
